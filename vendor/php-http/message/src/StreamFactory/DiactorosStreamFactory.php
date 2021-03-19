@@ -3,13 +3,16 @@
 namespace Http\Message\StreamFactory;
 
 use Http\Message\StreamFactory;
+use Laminas\Diactoros\Stream as LaminasStream;
 use Psr\Http\Message\StreamInterface;
-use Zend\Diactoros\Stream;
+use Zend\Diactoros\Stream as ZendStream;
 
 /**
  * Creates Diactoros streams.
  *
  * @author Михаил Красильников <m.krasilnikov@yandex.ru>
+ *
+ * @deprecated This will be removed in php-http/message2.0. Consider using the official Diactoros PSR-17 factory
  */
 final class DiactorosStreamFactory implements StreamFactory
 {
@@ -18,22 +21,28 @@ final class DiactorosStreamFactory implements StreamFactory
      */
     public function createStream($body = null)
     {
-        if (!$body instanceof StreamInterface) {
-            if (is_resource($body)) {
-                $body = new Stream($body);
-            } else {
-                $stream = new Stream('php://memory', 'rw');
-
-                if (null !== $body) {
-                    $stream->write((string) $body);
-                }
-
-                $body = $stream;
-            }
+        if ($body instanceof StreamInterface) {
+            return $body;
         }
 
-        $body->rewind();
+        if (is_resource($body)) {
+            if (class_exists(LaminasStream::class)) {
+                return new LaminasStream($body);
+            }
 
-        return $body;
+            return new ZendStream($body);
+        }
+
+        if (class_exists(LaminasStream::class)) {
+            $stream = new LaminasStream('php://memory', 'rw');
+        } else {
+            $stream = new ZendStream('php://memory', 'rw');
+        }
+
+        if (null !== $body && '' !== $body) {
+            $stream->write((string) $body);
+        }
+
+        return $stream;
     }
 }

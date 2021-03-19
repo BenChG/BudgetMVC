@@ -1,4 +1,11 @@
-<?PHP
+<?php
+
+/*
+ * Copyright (C) 2013 Mailgun
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
 
 namespace Mailgun\Lists;
 
@@ -6,7 +13,7 @@ namespace Mailgun\Lists;
  * This class is used for creating a unique hash for
  * mailing list subscription double-opt in requests.
  *
- * @link https://github.com/mailgun/mailgun-php/blob/master/src/Mailgun/Lists/README.md
+ * @see https://github.com/mailgun/mailgun-php/blob/master/src/Mailgun/Lists/README.md
  */
 class OptInHandler
 {

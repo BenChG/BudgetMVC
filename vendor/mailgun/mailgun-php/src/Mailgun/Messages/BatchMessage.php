@@ -1,4 +1,11 @@
-<?PHP
+<?php
+
+/*
+ * Copyright (C) 2013 Mailgun
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
 
 namespace Mailgun\Messages;
 
@@ -11,7 +18,8 @@ use Mailgun\Messages\Exceptions\TooManyParameters;
  * This class is used for batch sending. See the official documentation (link below)
  * for usage instructions.
  *
- * @link https://github.com/mailgun/mailgun-php/blob/master/src/Mailgun/Messages/README.md
+ * @deprecated Will be removed in 3.0. Use Mailgun\Message\BatchMessage
+ * @see https://github.com/mailgun/mailgun-php/blob/master/src/Mailgun/Messages/README.md
  */
 class BatchMessage extends MessageBuilder
 {
@@ -71,7 +79,7 @@ class BatchMessage extends MessageBuilder
     {
         if (array_key_exists($headerName, $this->counters['recipients'])) {
             if ($this->counters['recipients'][$headerName] == Api::RECIPIENT_COUNT_LIMIT) {
-                if ($this->autoSend == false) {
+                if (false === $this->autoSend) {
                     throw new TooManyParameters(ExceptionMessages::TOO_MANY_RECIPIENTS);
                 }
                 $this->sendMessage();
@@ -82,7 +90,7 @@ class BatchMessage extends MessageBuilder
 
         if (isset($this->message[$headerName])) {
             array_push($this->message[$headerName], $compiledAddress);
-        } elseif ($headerName == 'h:reply-to') {
+        } elseif ('h:reply-to' == $headerName) {
             $this->message[$headerName] = $compiledAddress;
         } else {
             $this->message[$headerName] = [$compiledAddress];
@@ -90,7 +98,7 @@ class BatchMessage extends MessageBuilder
 
         if (array_key_exists($headerName, $this->counters['recipients'])) {
             $this->counters['recipients'][$headerName] += 1;
-            if (!array_key_exists('id', $variables)) {
+            if (is_array($variables) && !array_key_exists('id', $variables)) {
                 $variables['id'] = $this->counters['recipients'][$headerName];
             }
         }

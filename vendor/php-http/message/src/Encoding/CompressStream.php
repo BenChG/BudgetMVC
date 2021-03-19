@@ -2,6 +2,7 @@
 
 namespace Http\Message\Encoding;
 
+use Clue\StreamFilter as Filter;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -12,8 +13,7 @@ use Psr\Http\Message\StreamInterface;
 class CompressStream extends FilteredStream
 {
     /**
-     * @param StreamInterface $stream
-     * @param int             $level
+     * @param int $level
      */
     public function __construct(StreamInterface $stream, $level = -1)
     {
@@ -21,13 +21,16 @@ class CompressStream extends FilteredStream
             throw new \RuntimeException('The zlib extension must be enabled to use this stream');
         }
 
-        parent::__construct($stream, ['window' => 15, 'level' => $level], ['window' => 15]);
+        parent::__construct($stream, ['window' => 15, 'level' => $level]);
+
+        // @deprecated will be removed in 2.0
+        $this->writeFilterCallback = Filter\fun($this->writeFilter(), ['window' => 15]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getReadFilter()
+    protected function readFilter()
     {
         return 'zlib.deflate';
     }
@@ -35,7 +38,7 @@ class CompressStream extends FilteredStream
     /**
      * {@inheritdoc}
      */
-    public function getWriteFilter()
+    protected function writeFilter()
     {
         return 'zlib.inflate';
     }

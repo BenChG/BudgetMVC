@@ -10,6 +10,8 @@ use Slim\Http\Stream;
  * Creates Slim 3 streams.
  *
  * @author Mika Tuupola <tuupola@appelsiini.net>
+ *
+ * @deprecated This will be removed in php-http/message2.0. Consider using the official Slim PSR-17 factory
  */
 final class SlimStreamFactory implements StreamFactory
 {
@@ -23,17 +25,14 @@ final class SlimStreamFactory implements StreamFactory
         }
 
         if (is_resource($body)) {
-            $stream = new Stream($body);
-        } else {
-            $resource = fopen('php://memory', 'r+');
-            $stream = new Stream($resource);
-
-            if (null !== $body) {
-                $stream->write((string) $body);
-            }
+            return new Stream($body);
         }
 
-        $stream->rewind();
+        $resource = fopen('php://memory', 'r+');
+        $stream = new Stream($resource);
+        if (null !== $body && '' !== $body) {
+            $stream->write((string) $body);
+        }
 
         return $stream;
     }
