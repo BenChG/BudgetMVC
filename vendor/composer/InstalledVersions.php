@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'bf7f01b0ad520087f226d9b5f097ab5f210d37ef',
+    'reference' => 'f9ab253faf7a964a2cc732dfceae6844fa58eaca',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'bf7f01b0ad520087f226d9b5f097ab5f210d37ef',
+      'reference' => 'f9ab253faf7a964a2cc732dfceae6844fa58eaca',
     ),
     'clue/stream-filter' => 
     array (
@@ -181,6 +181,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '4c4c1f9b7289a2ec57cde7f1e9762a5789506f88',
+    ),
+    'phpmailer/phpmailer' => 
+    array (
+      'pretty_version' => 'v6.3.0',
+      'version' => '6.3.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4a08cf4cdd2c38d12ee2b9fa69e5d235f37a6dcb',
     ),
     'psr/http-factory' => 
     array (
